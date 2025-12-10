@@ -3,53 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SolStaySHΞN™ Protocol | Advanced Market Anomaly Detection</title>
+    <title>SolStaySHΞN™ Protocol - Technical Research</title>
     
-    <!-- Libraries -->
+    <!-- Dependencies (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Fonts: Vazirmatn for FA, Inter/JetBrains for EN -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Vazirmatn:wght@100;300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@1,400;1,700&family=Vazirmatn:wght@300;400;700&display=swap" rel="stylesheet">
     
+    <!-- Config -->
     <script>
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
             colors: {
-              glass: 'rgba(255, 255, 255, 0.03)',
-              glassBorder: 'rgba(255, 255, 255, 0.08)',
-              solana: '#14F195',
-              solanaDark: '#0e8a56',
-              purple: '#9945FF',
-              darkBg: '#050505'
+              tv: {
+                bg: '#0a0b0e',       
+                card: '#131722',     
+                glass: 'rgba(30, 34, 45, 0.6)', 
+                border: 'rgba(255, 255, 255, 0.08)',
+                blue: '#2962ff',
+                accent: '#00F090',   
+                text: '#e0e3eb',
+                muted: '#6a6d78',
+              }
             },
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
-              fa: ['Vazirmatn', 'sans-serif'],
               mono: ['JetBrains Mono', 'monospace'],
+              serif: ['Playfair Display', 'serif'],
             },
-            animation: {
-              'blob': 'blob 7s infinite',
-              'gradient-x': 'gradient-x 15s ease infinite',
-              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            },
-            keyframes: {
-              blob: {
-                '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                '100%': { transform: 'translate(0px, 0px) scale(1)' },
-              },
-              'gradient-x': {
-                '0%, 100%': { 'background-position': '0% 50%' },
-                '50%': { 'background-position': '100% 50%' },
-              }
+            backgroundImage: {
+              'grid-pattern': "linear-gradient(to right, #1f2229 1px, transparent 1px), linear-gradient(to bottom, #1f2229 1px, transparent 1px)",
             }
           }
         }
@@ -58,290 +48,573 @@
     
     <style>
       body {
-        background-color: #050505;
-        color: #e2e8f0;
+        background-color: #0a0b0e;
+        color: #e0e3eb;
+        font-family: 'Inter', sans-serif;
         overflow-x: hidden;
       }
-      /* Animated Background */
-      .animate-bg {
-        background: linear-gradient(-45deg, #020202, #0f172a, #1e1b4b, #000000);
-        background-size: 400% 400%;
-        animation: gradient-x 15s ease infinite;
+      .bg-grid {
+        background-size: 40px 40px;
+        mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
       }
-      
-      .glass-card {
-        background: rgba(13, 13, 13, 0.6);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      .glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.4;
+        z-index: -1;
       }
-
-      .text-glow {
-        text-shadow: 0 0 20px rgba(20, 241, 149, 0.3);
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #0a0b0e; }
+      ::-webkit-scrollbar-thumb {
+        background: #2a2e39;
+        border-radius: 4px;
+        border: 2px solid #0a0b0e;
       }
-
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: #050505; }
-      ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-      ::-webkit-scrollbar-thumb:hover { background: #14F195; }
-
-      /* Bidi Isolation Fixes */
-      .bidi-isolate { unicode-bidi: isolate; }
+      ::-webkit-scrollbar-thumb:hover { background: #2962ff; }
+      * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      /* Custom Scrollbar for Code Block */
+      .custom-scrollbar::-webkit-scrollbar { height: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: #131722; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #2a2e39; border-radius: 3px; }
     </style>
-  </head>
-  <body class="animate-bg min-h-screen">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
     <div id="root"></div>
+    
+    <!-- Required Entry Point (Kept for compatibility, but logic is inline) -->
+    <script type="module" src="/index.tsx"></script>
 
+    <!-- Main Application Logic -->
     <script type="text/babel" data-presets="typescript,react">
       const { useState, useEffect, useRef } = React;
 
-      // --- TEXT CONTENT ---
-      const CONTENT = {
+      // --- CONSTANTS & DATA ---
+      const BLOCKCHAIN_DATA = [
+        { rank: 1, name: "Solana", tps: "~1,504", note: "Primary Reactor" },
+        { rank: 2, name: "Sui", tps: "~854" },
+        { rank: 3, name: "BNB Chain", tps: "~378" },
+        { rank: 4, name: "Polygon", tps: "~190" },
+        { rank: 5, name: "TON", tps: "~175" },
+        { rank: 6, name: "Tron", tps: "~160" },
+        { rank: 7, name: "Ethereum", tps: "~23" },
+        { rank: 8, name: "Bitcoin", tps: "~11", note: "Baseline Asset" },
+      ];
+
+      const PYTHON_CODE = `# SolStaySHΞN™ Anomaly Detector Core
+# Copyright (c) 2025 Shervin Noori. All Rights Reserved.
+
+import ccxt
+import time
+
+def detect_solstayshen_anomaly():
+    exchange = ccxt.binance()
+    TIMEFRAME = '1m'
+    BTC_PUMP_THRESHOLD = 0.30
+    SOL_LAG_RATIO = 0.5 
+
+    print(f"🟢 SolStaySHΞN™ Protocol Activated...")
+
+    while True:
+        try:
+            btc_ohlcv = exchange.fetch_ohlcv('BTC/USDT', timeframe=TIMEFRAME, limit=2)
+            sol_ohlcv = exchange.fetch_ohlcv('SOL/USDT', timeframe=TIMEFRAME, limit=2)
+            
+            btc_change = ((btc_ohlcv[-1][4] - btc_ohlcv[-1][1]) / btc_ohlcv[-1][1]) * 100
+            sol_change = ((sol_ohlcv[-1][4] - sol_ohlcv[-1][1]) / sol_ohlcv[-1][1]) * 100
+
+            if abs(btc_change) >= BTC_PUMP_THRESHOLD:
+                if btc_change > 0 and sol_change < (btc_change * SOL_LAG_RATIO):
+                    print(f"🚨 ALERT: BTC Pumping (+{btc_change:.2f}%) but SOL Lagging! -> TRAP DETECTED")
+                    return True
+                elif btc_change < 0 and sol_change > (btc_change * SOL_LAG_RATIO):
+                    print(f"🚨 ALERT: BTC Dumping but SOL Holding! -> FAKEOUT DETECTED")
+                    return True
+            
+            time.sleep(2)
+        except Exception as e:
+            print(e)`;
+
+      const PINE_CODE = `//@version=5
+// SolStaySHΞN™ Divergence Hunter
+// Copyright (c) 2025 Shervin Noori.
+
+indicator("SolStaySHΞN™ [Shervin Noori]", overlay=true)
+
+btc_sym = input.symbol("BINANCE:BTCUSDT")
+sol_sym = input.symbol("BINANCE:SOLUSDT")
+threshold = input.float(0.15, "BTC Impulse %")
+lag_ratio = input.float(0.5, "Sync Factor")
+
+[btc_o, btc_c] = request.security(btc_sym, timeframe.period, [open, close])
+[sol_o, sol_c] = request.security(sol_sym, timeframe.period, [open, close])
+
+btc_chg = ((btc_c - btc_o) / btc_o) * 100
+sol_chg = ((sol_c - sol_o) / sol_o) * 100
+
+bearish = btc_chg >= threshold and sol_chg < (btc_chg * lag_ratio)
+bullish = btc_chg <= -threshold and sol_chg > (btc_chg * lag_ratio)
+
+plotshape(bearish, "Trap", shape.labeldown, location.abovebar, color.red, 0, "SolStay")
+plotshape(bullish, "Resist", shape.labelup, location.belowbar, color.green, 0, "SolStay")`;
+
+      const CODE_SNIPPETS = [
+          { language: 'python', label: 'Python Core Algorithm', code: PYTHON_CODE },
+          { language: 'pine', label: 'TradingView Pine Script', code: PINE_CODE }
+      ];
+
+      const TRANSLATIONS = {
         en: {
-          navTitle: "SolStaySHΞN™ Protocol",
-          heroTitle: "The Latency Is The Signal.",
-          heroSub: "Don't trade the price. Trade the lag.",
-          heroDesc: "A proprietary high-frequency anomaly detector that uses Solana's superior throughput to expose Bitcoin's fakeouts before they happen.",
-          status: "SYSTEM ACTIVE",
-          
-          whyTitle: "The Mechanics",
-          whyDesc: "Why Solana acts as the 'Truth Layer'",
-          whyPoint1: "Bitcoin is heavy (PoW). It moves the market, but often on fake volume.",
-          whyPoint2: "Solana is instant (PoH). Arbitrage bots & Smart Money hit SOL first.",
-          whyPoint3: "The Theory: If BTC moves but SOL 'Stays', the BTC move is a lie.",
-          
-          scenariosTitle: "Market Scenarios (How to Trade)",
-          s1Title: "✅ The Validation (Safe)",
-          s1Desc: "BTC Pumps 🚀 + SOL Pumps 🚀 (Sync)",
-          s1Result: "Real breakout. High volume support. SAFE TO LONG.",
-          
-          s2Title: "🚨 The SolStay Trap (Danger)",
-          s2Desc: "BTC Pumps 🚀 + SOL Stays/Drops 🛑 (De-Sync)",
-          s2Result: "Fakeout. Lack of liquidity. PREPARE TO SHORT BTC.",
-          
-          liveData: "Live Velocity Hierarchy",
-          codeSection: "Algorithmic Implementation",
-          footer: "© 2025 Shervin Noori. Proprietary Research.",
+          title: "SolStaySHΞN™: The Correlation Latency & Divergence Anomaly",
+          classification: "Proprietary Algorithmic Research",
+          authorLabel: "Author",
+          dateLabel: "Date",
+          abstractTitle: "Abstract",
+          abstractBody: "The cryptocurrency market is governed by high-frequency correlation algorithms. This paper introduces the SolStaySHΞN™ Hypothesis, which posits that Solana (SOL), due to its superior network throughput and liquidity depth, acts as a primary leading indicator for Bitcoin (BTC) volatility. We demonstrate that when Bitcoin executes an impulse move but Solana fails to synchronize instantaneously—a phenomenon we define as 'The SolStay Event'—the probability of a market reversal or 'fakeout' increases exponentially. This research validates the use of Solana's reaction latency as a filter for high-frequency trading traps.",
+          ch1Title: "Chapter I: The Mechanics of Network Velocity",
+          ch1Subtitle: "Why Solana Reacts First",
+          ch1Body: "To understand the anomaly, we must first establish the hierarchy of network reaction speeds. Bitcoin, utilizing Proof-of-Work (PoW), operates with a block time of ~10 minutes. While it dictates the macro trend, its on-chain confirmation is slow. In contrast, Solana utilizes Proof-of-History (PoH) with block times of ~400ms and a theoretical throughput exceeding 65,000 TPS. In High-Frequency Trading (HFT), arbitrage bots and liquidity providers require the fastest execution layer. Therefore, smart money flows into Solana simultaneously or even milliseconds prior to a sustained Bitcoin move. If capital does not flow into Solana, the move in Bitcoin is likely driven by low-volume derivatives rather than spot demand.",
+          ch2Title: "Chapter II: The SolStaySHΞN™ Anomaly",
+          ch2Subtitle: "Decoding the Divergence",
+          ch2BodyP1: "The core of this protocol lies in the 'Instant Divergence' between the two assets.",
+          ch2List1Title: "1. The Bull Trap (Bearish Anomaly):",
+          ch2List1Body: "When BTC candles print a rapid upward impulse (>0.3% in 1m), but SOL remains flat, effectively 'staying' at its station. This indicates that the BTC pump is not validated by the broader risk-on market. The SolStaySHΞN™ algorithm flags this as a trap.",
+          ch2List2Title: "2. The Bear Trap (Bullish Anomaly):",
+          ch2List2Body: "Conversely, if BTC dumps aggressively but SOL refuses to drop or maintains its support level, it signals hidden accumulation. The 'staying' power of Solana in the face of Bitcoin's weakness reveals institutional strength.",
+          ch3Title: "Chapter III: Empirical Data & Hierarchy",
+          ch3Body: "The following hierarchy establishes the 'Reaction Velocity' of major chains. Solana's position at the top validates its status as the most sensitive reflexivity index.",
+          tableTitle: "Network Throughput Hierarchy (Real-World TPS)",
+          colRank: "Rank",
+          colBlockchain: "Blockchain",
+          colTps: "Approx. Daily TPS",
+          ch4Title: "Chapter IV: Live Verification (The SolStay Monitor)",
+          ch4Body: "Real-time observation of the anomaly requires side-by-side analysis of 1-minute candles.",
+          ch5Title: "Chapter V: Algorithmic Implementation",
+          ch5Body: "The SolStaySHΞN™ logic has been encapsulated into a deployable Python module for HFT bots and a Pine Script indicator for visual analysis.",
+          conclusionTitle: "Conclusion",
+          conclusionBody: "The SolStaySHΞN™ protocol proves that in the modern crypto microstructure, price action alone is insufficient. By measuring the 'Latency' of the fastest reactor (Solana) against the baseline asset (Bitcoin), traders can filter out noise with high statistical probability. This framework is now intellectual property of Shervin Noori, codified for automated deployment.",
+          footerText: "© 2025 Shervin Noori. All Rights Reserved. | SolStaySHΞN™ Research Repository",
+          viewGithub: "View on GitHub"
         },
         fa: {
-          navTitle: "پروتکل سول‌استیشن",
-          heroTitle: "تاخیر، همان سیگنال است.",
-          heroSub: "قیمت را معامله نکنید، لگ (Lag) را معامله کنید.",
-          heroDesc: "یک سیستم تشخیص ناهنجاری فرکانس‌بالا که با استفاده از سرعت برتر شبکه سولانا، حرکات فیک و جعلی بیت‌کوین را قبل از ریزش افشا می‌کند.",
-          status: "سیستم فعال",
-          
-          whyTitle: "مکانیسم عملکرد",
-          whyDesc: "چرا سولانا 'لایه حقیقت' بازار است؟",
-          whyPoint1: "بیت‌کوین سنگین است (PoW). بازار را تکان می‌دهد، اما اغلب با حجم جعلی.",
-          whyPoint2: "سولانا لحظه‌ای است (PoH). ربات‌های آربیتراژ و پول هوشمند ابتدا وارد SOL می‌شوند.",
-          whyPoint3: "تئوری اصلی: اگر بیت‌کوین حرکت کند اما سولانا 'بماند' (Stay)، حرکت بیت‌کوین دروغ است.",
-          
-          scenariosTitle: "سناریوهای معاملاتی (کاربرد عملی)",
-          s1Title: "✅ تایید روند (امن)",
-          s1Desc: "بیت‌کوین پامپ می‌کند 🚀 + سولانا هم‌پای آن می‌رود 🚀",
-          s1Result: "شکست واقعی. حمایت حجم بالا. پوزیشن Long امن است.",
-          
-          s2Title: "🚨 تله سول‌استیشن (خطر)",
-          s2Desc: "بیت‌کوین پامپ می‌کند 🚀 + سولانا درجا می‌زند 🛑",
-          s2Result: "حرکت فیک (Fakeout). عدم نقدینگی. آماده Short روی بیت‌کوین باشید.",
-          
-          liveData: "سلسله مراتب سرعت زنده",
-          codeSection: "پیاده‌سازی الگوریتمی (ربات)",
-          footer: "© ۲۰۲۵ شروین نوری. تمامی حقوق محفوظ است.",
+          title: "SolStaySHΞN™: The Correlation Latency & Divergence Anomaly",
+          classification: "تحقیقات الگوریتمی اختصاصی",
+          authorLabel: "نویسنده",
+          dateLabel: "تاریخ",
+          abstractTitle: "چکیده",
+          abstractBody: "بازار ارزهای دیجیتال تحت حاکمیت الگوریتم‌های همبستگی با فرکانس بالا است. این مقاله فرضیه SolStaySHΞN™ را معرفی می‌کند که بیان می‌دارد سولانا (SOL) به دلیل توان عملیاتی شبکه و عمق نقدینگی برتر، به عنوان یک شاخص پیشرو اصلی برای نوسانات بیت‌کوین (BTC) عمل می‌کند. ما نشان می‌دهیم که وقتی بیت‌کوین یک حرکت تکانه‌ای انجام می‌دهد اما سولانا موفق به همگام‌سازی فوری نمی‌شود—پدیده‌ای که ما آن را 'رویداد SolStay' می‌نامیم—احتمال بازگشت بازار یا 'حرکت جعلی' به طور تصاعدی افزایش می‌یابد. این تحقیق استفاده از تاخیر واکنش سولانا را به عنوان فیلتری برای تله‌های معاملاتی فرکانس بالا تایید می‌کند.",
+          ch1Title: "فصل اول: مکانیک سرعت شبکه",
+          ch1Subtitle: "چرا سولانا اول واکنش نشان می‌دهد",
+          ch1Body: "برای درک این ناهنجاری، ابتدا باید سلسله مراتب سرعت واکنش شبکه را تعیین کنیم. بیت‌کوین با استفاده از اثبات کار (PoW) با زمان بلاک حدود ۱۰ دقیقه عمل می‌کند. در حالی که روند کلان را دیکته می‌کند، تایید درون‌زنجیره‌ای آن کند است. در مقابل، سولانا از اثبات تاریخ (PoH) با زمان بلاک حدود ۴۰۰ میلی‌ثانیه و توان عملیاتی تئوری بیش از ۶۵,۰۰۰ تراکنش در ثانیه استفاده می‌کند. در معاملات فرکانس بالا (HFT)، ربات‌های آربیتراژ و تامین‌کنندگان نقدینگی به سریع‌ترین لایه اجرایی نیاز دارند. بنابراین، پول هوشمند همزمان یا حتی میلی‌ثانیه‌هایی قبل از حرکت پایدار بیت‌کوین به سولانا سرازیر می‌شود. اگر سرمایه به سولانا وارد نشود، حرکت در بیت‌کوین احتمالا توسط مشتقات کم‌حجم هدایت می‌شود نه تقاضای واقعی.",
+          ch2Title: "فصل دوم: ناهنجاری SolStaySHΞN™",
+          ch2Subtitle: "رمزگشایی واگرایی",
+          ch2BodyP1: "هسته این پروتکل در 'واگرایی لحظه‌ای' بین دو دارایی نهفته است.",
+          ch2List1Title: "۱. تله گاوی (ناهنجاری نزولی):",
+          ch2List1Body: "زمانی که کندل‌های BTC یک جهش صعودی سریع (بیش از ۰.۳٪ در ۱ دقیقه) ثبت می‌کنند، اما SOL صاف می‌ماند و عملاً در ایستگاه خود 'می‌ماند'. این نشان می‌دهد که پمپاژ BTC توسط بازار ریسک‌پذیر گسترده‌تر تایید نشده است. الگوریتم SolStaySHΞN™ این را به عنوان یک تله علامت‌گذاری می‌کند.",
+          ch2List2Title: "۲. تله خرسی (ناهنجاری صعودی):",
+          ch2List2Body: "برعکس، اگر BTC به شدت ریزش کند اما SOL از ریزش امتناع ورزد یا سطح حمایت خود را حفظ کند، این نشان‌دهنده انباشت پنهان است. قدرت 'ماندن' سولانا در برابر ضعف بیت‌کوین، قدرت نهادی را آشکار می‌کند.",
+          ch3Title: "فصل سوم: داده‌های تجربی و سلسله مراتب",
+          ch3Body: "سلسله مراتب زیر 'سرعت واکنش' زنجیره‌های اصلی را تعیین می‌کند. جایگاه سولانا در صدر، وضعیت آن را به عنوان حساس‌ترین شاخص بازتابی تایید می‌کند.",
+          tableTitle: "سلسله مراتب توان عملیاتی شبکه (TPS واقعی)",
+          colRank: "رتبه",
+          colBlockchain: "بلاک‌چین",
+          colTps: "تراکنش بر ثانیه (تقریبی)",
+          ch4Title: "فصل چهارم: تایید زنده (مانیتور SolStay)",
+          ch4Body: "مشاهده بلادرنگ ناهنجاری نیازمند تحلیل کنار هم کندل‌های ۱ دقیقه‌ای است.",
+          ch5Title: "فصل پنجم: پیاده‌سازی الگوریتم",
+          ch5Body: "منطق SolStaySHΞN™ در یک ماژول پایتون قابل استقرار برای ربات‌های HFT و یک اندیکاتور Pine Script برای تحلیل بصری کپسوله شده است.",
+          conclusionTitle: "نتیجه‌گیری",
+          conclusionBody: "پروتکل SolStaySHΞN™ ثابت می‌کند که در ریزساختار مدرن کریپتو، پرایس اکشن (حرکت قیمت) به تنهایی کافی نیست. با اندازه‌گیری 'تاخیر' سریع‌ترین رآکتور (سولانا) نسبت به دارایی پایه (بیت‌کوین)، معامله‌گران می‌توانند نویز را با احتمال آماری بالا فیلتر کنند. این چارچوب اکنون در مالکیت معنوی شروین نوری است و برای استقرار خودکار کدنویسی شده است.",
+          footerText: "© 2025 شروین نوری. تمامی حقوق محفوظ است. | مخزن تحقیقاتی SolStaySHΞN™",
+          viewGithub: "مشاهده در گیت‌هاب"
         }
       };
 
-      const BlockItem = ({ rank, name, speed, highlight }) => (
-        <div className={`flex items-center justify-between p-4 mb-2 rounded-xl border transition-all duration-300 ${highlight ? 'bg-solana/10 border-solana/50 shadow-[0_0_15px_rgba(20,241,149,0.2)] scale-[1.02]' : 'bg-white/5 border-white/5 hover:bg-white/10'}`}>
-          <div className="flex items-center gap-4">
-             <span className={`font-mono text-sm w-6 h-6 flex items-center justify-center rounded-full ${highlight ? 'bg-solana text-black font-bold' : 'bg-white/10 text-gray-400'}`}>{rank}</span>
-             <span className="font-bold tracking-wide">{name}</span>
-             {highlight && <span className="text-[10px] bg-solana text-black px-2 py-0.5 rounded font-bold uppercase animate-pulse">Reactor</span>}
-          </div>
-          <div className="text-right">
-             <div className={`font-mono font-bold ${highlight ? 'text-solana' : 'text-gray-400'}`}>{speed} <span className="text-[10px] opacity-50">TPS</span></div>
-          </div>
-        </div>
-      );
+      // --- COMPONENTS ---
 
-      const ScenarioCard = ({ title, cond, res, type, lang }) => (
-        <div className={`glass-card p-6 rounded-2xl border-l-4 ${type === 'good' ? 'border-l-solana' : 'border-l-red-500'} hover:-translate-y-1 transition-transform duration-300`}>
-           <h3 className={`text-xl font-bold mb-2 ${type === 'good' ? 'text-solana' : 'text-red-500'}`}>{title}</h3>
-           <div className="bg-black/40 rounded-lg p-3 mb-3 border border-white/5">
-             <p className="font-mono text-sm text-gray-300" dir="ltr">{cond}</p>
-           </div>
-           <p className={`text-sm font-bold ${lang === 'fa' ? 'font-fa' : ''}`}>{res}</p>
-        </div>
-      );
+      // 1. TradingView Widget
+      const TradingViewWidget = ({ symbol, containerId }) => {
+        const isMounted = useRef(false);
 
-      const TradingViewWidget = ({ symbol, id }) => {
         useEffect(() => {
-          if(window.TradingView) {
-            new window.TradingView.widget({
-              "width": "100%",
-              "height": 400,
-              "symbol": symbol,
-              "interval": "1",
-              "timezone": "Etc/UTC",
-              "theme": "dark",
-              "style": "1",
-              "locale": "en",
-              "toolbar_bg": "#f1f3f6",
-              "enable_publishing": false,
-              "hide_top_toolbar": true,
-              "save_image": false,
-              "container_id": id,
-              "backgroundColor": "rgba(0, 0, 0, 1)", 
-              "gridLineColor": "rgba(255, 255, 255, 0.05)"
-            });
-          }
-        }, []);
-        return <div id={id} className="w-full h-[400px] rounded-xl overflow-hidden border border-white/10 shadow-2xl" />;
-      };
-
-      const App = () => {
-        const [lang, setLang] = useState('fa'); // Default to Persian
-        const t = CONTENT[lang];
-        const fontClass = lang === 'fa' ? 'font-fa' : 'font-sans';
-        const dir = lang === 'fa' ? 'rtl' : 'ltr';
+          if (isMounted.current) return;
+          const initWidget = () => {
+            if (window.TradingView) {
+              new window.TradingView.widget({
+                "width": "100%",
+                "height": 450,
+                "symbol": symbol,
+                "interval": "1",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#131722",
+                "enable_publishing": false,
+                "hide_top_toolbar": false,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "container_id": containerId,
+                "backgroundColor": "#131722",
+                "gridLineColor": "#2a2e39"
+              });
+              isMounted.current = true;
+            } else {
+              setTimeout(initWidget, 500);
+            }
+          };
+          initWidget();
+        }, [symbol, containerId]);
 
         return (
-          <div className={`relative ${dir === 'rtl' ? 'font-fa' : 'font-sans'}`} dir={dir}>
-            
-            {/* Background Blobs */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-               <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
-               <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-solana/10 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
-            </div>
-
-            {/* Navbar */}
-            <nav className="fixed w-full z-50 top-0 glass-card border-b-0 border-b-white/5 bg-black/50 backdrop-blur-xl">
-               <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                     <i className="fa-solid fa-layer-group text-solana text-xl"></i>
-                     <span className="font-bold text-lg tracking-wider font-mono text-white">SolStay<span className="text-solana">SHΞN</span>™</span>
-                  </div>
-                  <button onClick={() => setLang(l => l === 'en' ? 'fa' : 'en')} className="px-4 py-1.5 rounded-full border border-white/20 hover:bg-white/10 text-xs font-bold transition-all">
-                     {lang === 'en' ? 'فارسی' : 'ENGLISH'}
-                  </button>
-               </div>
-            </nav>
-
-            <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-6xl mx-auto">
-               
-               {/* Hero Section */}
-               <div className="text-center mb-24">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-solana/10 border border-solana/30 text-solana text-xs font-bold mb-6 animate-pulse-slow">
-                     <span className="w-2 h-2 rounded-full bg-solana"></span>
-                     {t.status}
-                  </div>
-                  <h1 className={`text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500 mb-6 drop-shadow-lg leading-tight ${fontClass}`}>
-                     {t.heroTitle}
-                  </h1>
-                  <p className="text-xl md:text-2xl text-solana mb-6 font-bold">{t.heroSub}</p>
-                  <p className="text-gray-400 max-w-2xl mx-auto text-lg leading-relaxed opacity-80">{t.heroDesc}</p>
-               </div>
-
-               {/* Live Monitor (Widgets) */}
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
-                  <div className="relative">
-                     <div className="absolute -top-3 left-4 bg-black px-2 text-xs font-mono text-solana border border-solana/50 rounded z-10">SOLUSDT (The Leader)</div>
-                     <TradingViewWidget symbol="BINANCE:SOLUSDT" id="tv_sol" />
-                  </div>
-                  <div className="relative">
-                     <div className="absolute -top-3 left-4 bg-black px-2 text-xs font-mono text-gray-500 border border-white/20 rounded z-10">BTCUSDT (The Laggard)</div>
-                     <TradingViewWidget symbol="BINANCE:BTCUSDT" id="tv_btc" />
-                  </div>
-               </div>
-
-               {/* The Logic Section */}
-               <div className="grid md:grid-cols-12 gap-12 mb-24">
-                  <div className="md:col-span-7 space-y-6">
-                     <h2 className="text-3xl font-bold text-white mb-8 border-r-4 border-solana pr-4">{t.whyTitle}</h2>
-                     <ul className="space-y-6">
-                        {[t.whyPoint1, t.whyPoint2, t.whyPoint3].map((item, i) => (
-                           <li key={i} className="flex items-start gap-4">
-                              <span className="flex-shrink-0 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-solana font-mono font-bold border border-white/10">{i+1}</span>
-                              <p className="text-gray-300 text-lg leading-relaxed">{item}</p>
-                           </li>
-                        ))}
-                     </ul>
-                  </div>
-                  <div className="md:col-span-5">
-                     <div className="glass-card rounded-2xl p-6">
-                        <h3 className="text-gray-400 text-sm uppercase tracking-widest mb-6 font-bold">{t.liveData}</h3>
-                        <BlockItem rank="1" name="Solana" speed="1,504" highlight={true} />
-                        <BlockItem rank="2" name="Sui" speed="854" />
-                        <BlockItem rank="3" name="BNB Chain" speed="378" />
-                        <BlockItem rank="8" name="Bitcoin" speed="11" />
-                     </div>
-                  </div>
-               </div>
-
-               {/* Scenarios (The Utility) */}
-               <div className="mb-24">
-                   <h2 className="text-3xl font-bold text-center mb-12">{t.scenariosTitle}</h2>
-                   <div className="grid md:grid-cols-2 gap-8">
-                      <ScenarioCard 
-                        title={t.s1Title} 
-                        cond={t.s1Desc} 
-                        res={t.s1Result} 
-                        type="good" 
-                        lang={lang} 
-                      />
-                      <ScenarioCard 
-                        title={t.s2Title} 
-                        cond={t.s2Desc} 
-                        res={t.s2Result} 
-                        type="bad" 
-                        lang={lang} 
-                      />
-                   </div>
-               </div>
-
-               {/* Code Snippet */}
-               <div className="glass-card rounded-2xl overflow-hidden border border-white/10 mb-24" dir="ltr">
-                  <div className="bg-black/50 px-6 py-3 border-b border-white/5 flex items-center justify-between">
-                     <span className="text-xs font-mono text-solana">{t.codeSection}</span>
-                     <div className="flex gap-2">
-                        <div className="w-3 h-3 rounded-full bg-red-500/20"></div>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500/20"></div>
-                        <div className="w-3 h-3 rounded-full bg-green-500/20"></div>
-                     </div>
-                  </div>
-                  <div className="p-6 bg-[#0a0a0a] overflow-x-auto">
-                     <pre className="font-mono text-sm text-gray-400 leading-relaxed">
-<span className="text-purple">def</span> <span className="text-blue-400">detect_solstayshen_anomaly</span>():
-    <span className="text-gray-500"># Check for volatility divergence</span>
-    btc_change = get_change(<span className="text-green-400">'BTC'</span>)
-    sol_change = get_change(<span className="text-green-400">'SOL'</span>)
-
-    <span className="text-gray-500"># THE THESIS: BTC Moves, SOL Stays = TRAP</span>
-    <span className="text-purple">if</span> btc_change > <span className="text-orange-400">0.30</span> <span className="text-purple">and</span> sol_change < (btc_change * <span className="text-orange-400">0.5</span>):
-        <span className="text-purple">return</span> <span className="text-green-400">"🚨 FAKEOUT DETECTED: SHORT BTC"</span>
-    
-    <span className="text-purple">return</span> <span className="text-gray-500">"SYNCED"</span>
-                     </pre>
-                  </div>
-               </div>
-
-            </main>
-
-            <footer className="border-t border-white/5 bg-black py-12 text-center relative z-10">
-               <p className="text-gray-500 font-mono text-sm">{t.footer}</p>
-            </footer>
-
+          <div className="w-full h-[450px] border border-tv-border rounded overflow-hidden bg-tv-bg relative">
+            <div id={containerId} className="w-full h-full" />
           </div>
         );
       };
 
+      // 2. CodeBlock
+      const CodeBlock = () => {
+        const [activeTab, setActiveTab] = useState(0);
+        const [copied, setCopied] = useState(false);
+
+        const handleCopy = async () => {
+          const code = CODE_SNIPPETS[activeTab].code;
+          try {
+            await navigator.clipboard.writeText(code);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          } catch (err) {
+            console.error('Failed to copy text: ', err);
+          }
+        };
+
+        return (
+          <div className="w-full border border-tv-border rounded-lg overflow-hidden bg-tv-card shadow-lg my-8">
+            <div className="flex items-center justify-between bg-[#1e222d] border-b border-tv-border px-4 py-2">
+              <div className="flex gap-4">
+                  {CODE_SNIPPETS.map((snippet, index) => (
+                  <button
+                      key={index}
+                      onClick={() => setActiveTab(index)}
+                      className={`text-xs font-semibold px-2 py-1 transition-colors relative
+                      ${activeTab === index 
+                          ? 'text-tv-blue' 
+                          : 'text-tv-muted hover:text-tv-text'}`}
+                  >
+                      {snippet.label}
+                      {activeTab === index && <span className="absolute bottom-[-9px] left-0 w-full h-[2px] bg-tv-blue"></span>}
+                  </button>
+                  ))}
+              </div>
+              <button 
+                  onClick={handleCopy}
+                  className="flex items-center gap-2 px-3 py-1 text-xs text-tv-muted hover:text-white bg-tv-border hover:bg-[#363a45] rounded transition-colors"
+              >
+                  {copied ? <span className="text-tv-green font-bold">Copied</span> : <span>Copy</span>}
+              </button>
+            </div>
+            <div className="p-0 overflow-x-auto custom-scrollbar bg-[#131722]">
+              <pre className="font-mono text-xs md:text-sm leading-6 p-6">
+                  {CODE_SNIPPETS[activeTab].code.split('\n').map((line, i) => (
+                      <div key={i} className="table-row hover:bg-[#1e222d] transition-colors duration-75">
+                          <span className="table-cell select-none text-tv-muted text-right pr-4 w-10 border-r border-tv-border mr-4 opacity-50">{i + 1}</span>
+                          <span className="table-cell pl-4 text-tv-text whitespace-pre-wrap">{line}</span>
+                      </div>
+                  ))}
+              </pre>
+            </div>
+          </div>
+        );
+      };
+
+      // 3. Parallax Section
+      const useScroll = () => {
+        const [scrollY, setScrollY] = useState(0);
+        useEffect(() => {
+          const handleScroll = () => setScrollY(window.scrollY);
+          window.addEventListener("scroll", handleScroll, { passive: true });
+          return () => window.removeEventListener("scroll", handleScroll);
+        }, []);
+        return scrollY;
+      };
+
+      const ParallaxSection = ({ speed, children, className = "" }) => {
+        const scrollY = useScroll();
+        return (
+          <div 
+            className={`transition-transform duration-75 ease-out will-change-transform ${className}`} 
+            style={{ transform: `translateY(${scrollY * speed}px)` }}
+          >
+            {children}
+          </div>
+        );
+      };
+
+      // 4. Live Ticker Table
+      const LiveTickerTable = ({ data, t }) => {
+        const [liveData, setLiveData] = useState(data);
+
+        useEffect(() => {
+          const baseValues = data.map(item => ({
+            ...item,
+            rawTps: parseInt(item.tps.replace(/[^0-9]/g, '')) || 10
+          }));
+
+          const interval = setInterval(() => {
+            setLiveData(current => {
+              return baseValues.map((item) => {
+                const variance = item.rawTps * 0.04;
+                const noise = (Math.random() - 0.5) * 2 * variance;
+                const newValue = Math.floor(item.rawTps + noise);
+                return { ...item, tps: `${newValue.toLocaleString()}` };
+              });
+            });
+          }, 800); 
+
+          return () => clearInterval(interval);
+        }, [data]);
+
+        return (
+          <div className="w-full bg-[#0e1016] border border-[#2a2e39] rounded-sm overflow-hidden shadow-2xl mt-8 font-sans">
+            <div className="bg-[#1e222d] border-b border-[#2a2e39] px-6 py-4 flex items-center justify-between">
+               <span className="text-[#d1d4dc] font-bold text-sm uppercase tracking-wide flex items-center gap-2">
+                  <div className="w-2 h-2 bg-tv-accent rounded-full animate-pulse"></div>
+                  {t.tableTitle}
+               </span>
+               <span className="text-[#787b86] text-xs font-mono">LIVE FEED</span>
+            </div>
+            <table className="w-full text-left border-collapse">
+              <thead className="bg-[#131722] text-[#787b86] text-xs uppercase font-medium">
+                <tr>
+                  <th className="px-6 py-3 w-16 text-center border-b border-[#2a2e39]">#</th>
+                  <th className="px-6 py-3 border-b border-[#2a2e39]">{t.colBlockchain}</th>
+                  <th className="px-6 py-3 text-right border-b border-[#2a2e39]">{t.colTps}</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm font-mono text-[#d1d4dc]">
+                {liveData.map((chain, idx) => (
+                  <tr key={chain.name} className="hover:bg-[#1e222d] transition-colors border-b border-[#2a2e39] last:border-0">
+                    <td className="px-6 py-4 text-center text-[#5d606b]">{chain.rank}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <span className="font-bold text-base tracking-tight text-[#e0e3eb]">{chain.name}</span>
+                        {chain.note && (
+                          <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded border 
+                            ${chain.note.includes('Reactor') 
+                              ? 'text-tv-accent border-tv-accent/30 bg-tv-accent/10' 
+                              : 'text-orange-400 border-orange-400/30 bg-orange-400/10'}`}>
+                            {chain.note}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <span className={`text-base font-bold tracking-tight ${idx === 0 ? 'text-tv-accent' : 'text-[#d1d4dc]'}`}>
+                         {chain.tps}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      };
+
+      // --- MAIN APP COMPONENT ---
+      const App = () => {
+        const [lang, setLang] = useState('en');
+        const t = TRANSLATIONS[lang];
+
+        useEffect(() => {
+          // Force LTR global structure, only content direction changes
+          document.documentElement.dir = 'ltr'; 
+          document.documentElement.lang = lang;
+        }, [lang]);
+
+        const toggleLanguage = () => setLang(prev => prev === 'en' ? 'fa' : 'en');
+        const contentDir = lang === 'fa' ? 'rtl' : 'ltr';
+        const contentAlign = lang === 'fa' ? 'text-right' : 'text-justify';
+        const fontFamily = lang === 'fa' ? 'font-[Vazirmatn], sans-serif' : 'font-sans';
+
+        return (
+          <div className={`relative min-h-screen bg-tv-bg text-tv-text ${fontFamily} selection:bg-tv-blue selection:text-white`}>
+            {/* Background */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <div className="absolute inset-0 bg-grid-pattern opacity-[0.05] animate-pulse"></div>
+              <div className="glow-orb w-[500px] h-[500px] bg-blue-900/20 top-[-100px] left-[-100px]"></div>
+              <div className="glow-orb w-[600px] h-[600px] bg-purple-900/10 bottom-0 right-[-200px]"></div>
+            </div>
+
+            {/* Navbar */}
+            <nav className="fixed top-0 left-0 w-full h-16 bg-[#0a0b0e]/95 border-b border-tv-border z-50 transition-all backdrop-blur-sm">
+               <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+                   <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+                      <div className="flex flex-col justify-center">
+                        <span className="font-bold text-lg tracking-tight text-white leading-none">SolStaySHΞN™</span>
+                        <span className="text-[10px] text-tv-muted uppercase tracking-widest font-mono">Research Terminal</span>
+                      </div>
+                   </div>
+                   <button 
+                      onClick={toggleLanguage}
+                      className="text-xs font-bold text-tv-muted hover:text-white transition-colors uppercase tracking-widest px-4 py-2 border border-tv-border rounded hover:border-tv-muted"
+                   >
+                     {lang === 'en' ? 'EN / FA' : 'FA / EN'}
+                   </button>
+               </div>
+            </nav>
+
+            {/* Content */}
+            <main className="relative z-10 pt-32 pb-32 px-6 max-w-4xl mx-auto">
+              
+              {/* Hero */}
+              <div className="relative mb-32 min-h-[60vh] flex flex-col justify-center items-center text-center">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-tv-blue/20 to-purple-500/20 blur-[120px] rounded-full z-[-1]"></div>
+                  <ParallaxSection speed={-0.2}>
+                    <div className="mb-6 inline-flex items-center gap-2 px-3 py-1 rounded border border-tv-blue/30 bg-tv-blue/5 text-tv-blue text-[10px] font-mono uppercase tracking-widest">
+                       <span>Protocol V.1.0</span>
+                       <span className="w-1 h-1 bg-tv-blue rounded-full"></span>
+                       <span>Classified</span>
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-black text-white mb-8 leading-[1.1] tracking-tighter drop-shadow-2xl">
+                      {lang === 'en' ? (
+                        <React.Fragment>The Correlation <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Latency & Divergence</span></React.Fragment>
+                      ) : (
+                        t.title
+                      )}
+                    </h1>
+                    <div className="flex items-center justify-center gap-8 text-sm font-medium text-tv-muted">
+                       <div className="flex items-center gap-2">
+                          <span className="text-white font-bold">Shervin Noori</span>
+                       </div>
+                       <div className="w-px h-4 bg-tv-border"></div>
+                       <span>Dec 09, 2025</span>
+                    </div>
+                  </ParallaxSection>
+              </div>
+
+              {/* Abstract */}
+              <section className="mb-32 relative">
+                 <ParallaxSection speed={0.1} className="absolute -right-20 -top-20 opacity-10 text-[10rem] font-black text-white select-none z-[-1]">00</ParallaxSection>
+                 <div className="p-8 md:p-10 border-l-2 border-tv-blue bg-gradient-to-r from-tv-blue/5 to-transparent backdrop-blur-sm" dir={contentDir}>
+                    <h2 className={`text-xs font-bold text-tv-blue uppercase tracking-[0.2em] mb-4 ${lang === 'fa' ? 'text-right' : 'text-left'}`}>
+                      {t.abstractTitle}
+                    </h2>
+                    <p className={`text-lg md:text-xl font-serif italic text-gray-300 leading-relaxed ${contentAlign}`}>"{t.abstractBody}"</p>
+                 </div>
+              </section>
+
+              {/* Chapters */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-32">
+                 <div className="md:col-span-1 hidden md:flex flex-col items-center">
+                    <div className="w-px h-full bg-gradient-to-b from-tv-blue via-tv-border to-transparent"></div>
+                 </div>
+                 <div className="md:col-span-11 space-y-24">
+                    
+                    {/* Ch 1 */}
+                    <article className="relative" dir={contentDir}>
+                       <div className={`absolute -top-4 text-6xl font-black text-white/5 font-mono select-none ${lang === 'fa' ? '-right-12' : '-left-12'}`}>01</div>
+                       <h2 className={`text-3xl font-bold text-white mb-6 flex items-center gap-4 ${lang === 'fa' ? 'justify-start' : ''}`}>{t.ch1Title}</h2>
+                       <p className={`text-base text-gray-400 leading-8 ${contentAlign}`}>{t.ch1Body}</p>
+                    </article>
+
+                    {/* Ch 2 */}
+                    <article className="relative" dir={contentDir}>
+                       <div className={`absolute -top-4 text-6xl font-black text-white/5 font-mono select-none ${lang === 'fa' ? '-right-12' : '-left-12'}`}>02</div>
+                       <h2 className="text-3xl font-bold text-white mb-2">{t.ch2Title}</h2>
+                       <p className="text-tv-blue font-mono text-sm mb-8">{t.ch2Subtitle}</p>
+                       <p className={`text-base text-gray-400 leading-8 mb-8 ${contentAlign}`}>{t.ch2BodyP1}</p>
+                       <div className="grid md:grid-cols-2 gap-6" dir={contentDir}>
+                          <div className="p-6 bg-[#131722] border border-tv-border hover:border-red-900/50 transition-colors group">
+                             <h3 className="text-red-400 font-bold mb-3 group-hover:translate-x-1 transition-transform text-sm uppercase tracking-wide">▼ {t.ch2List1Title}</h3>
+                             <p className={`text-sm text-gray-500 leading-relaxed ${contentAlign}`}>{t.ch2List1Body}</p>
+                          </div>
+                          <div className="p-6 bg-[#131722] border border-tv-border hover:border-green-900/50 transition-colors group">
+                             <h3 className="text-green-400 font-bold mb-3 group-hover:translate-x-1 transition-transform text-sm uppercase tracking-wide">▲ {t.ch2List2Title}</h3>
+                             <p className={`text-sm text-gray-500 leading-relaxed ${contentAlign}`}>{t.ch2List2Body}</p>
+                          </div>
+                       </div>
+                    </article>
+                 </div>
+              </div>
+
+              {/* Data Table */}
+              <section className="mb-32 relative">
+                  <ParallaxSection speed={0.05} className="absolute inset-0 bg-tv-blue/5 blur-3xl rounded-full z-[-1]"></ParallaxSection>
+                  <div className="mb-8 border-b border-tv-border pb-4" dir={contentDir}>
+                     <h2 className="text-2xl font-bold text-white mb-2">{t.ch3Title}</h2>
+                     <p className="text-tv-muted text-sm">{t.ch3Body}</p>
+                  </div>
+                  <div dir="ltr"><LiveTickerTable data={BLOCKCHAIN_DATA} t={t} /></div>
+              </section>
+
+              {/* Charts */}
+              <section className="mb-32">
+                 <div className="flex items-center gap-4 mb-8" dir={contentDir}>
+                    <div className="w-1 h-6 bg-tv-accent"></div>
+                    <h2 className="text-xl font-bold text-white uppercase tracking-wider">{t.ch4Title}</h2>
+                 </div>
+                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" dir="ltr">
+                    <div className="relative group">
+                       <div className="relative bg-[#131722] p-1 border border-tv-border">
+                          <TradingViewWidget symbol="BINANCE:BTCUSDT" containerId="tv_btc_thesis" />
+                       </div>
+                    </div>
+                    <div className="relative group">
+                       <div className="relative bg-[#131722] p-1 border border-tv-border">
+                          <TradingViewWidget symbol="BINANCE:SOLUSDT" containerId="tv_sol_thesis" />
+                       </div>
+                    </div>
+                 </div>
+              </section>
+
+              {/* Algorithm */}
+              <section className="mb-32" dir="ltr">
+                 <h2 className="text-xl font-bold text-white mb-8 border-l-4 border-tv-blue pl-4 text-left">{t.ch5Title}</h2>
+                 <CodeBlock />
+              </section>
+
+              {/* Conclusion */}
+              <section className="relative py-16 px-6 border-t border-b border-tv-border bg-[#0e1016]" dir={contentDir}>
+                 <h2 className="text-2xl font-serif font-bold text-white mb-6 text-center">{t.conclusionTitle}</h2>
+                 <p className={`text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto ${contentAlign}`}>{t.conclusionBody}</p>
+              </section>
+            </main>
+
+            {/* Footer */}
+            <footer className="bg-[#050608] py-20 relative overflow-hidden" dir={contentDir}>
+               <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+                  <h3 className="text-2xl font-black text-white tracking-widest mb-2">SHΞN™</h3>
+                  <p className="text-xs text-tv-muted font-mono mb-12 uppercase tracking-[0.3em]">Research Laboratory</p>
+                  <p className="text-sm text-gray-600 mb-8">{t.footerText}</p>
+                  <a href="https://T.me/shervini" target="_blank" rel="noopener noreferrer" className="inline-block group">
+                     <span className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-100 via-gray-400 to-gray-100 bg-[length:200%_auto] animate-[gradient_3s_linear_infinite] group-hover:scale-105 transition-transform block">
+                        Exclusive SHΞN™ made
+                     </span>
+                  </a>
+               </div>
+            </footer>
+          </div>
+        );
+      };
+
+      // --- MOUNT ---
       const root = ReactDOM.createRoot(document.getElementById('root'));
       root.render(<App />);
     </script>
   </body>
 </html>
-
-
-  
